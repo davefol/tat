@@ -1,0 +1,18 @@
+{% extends "centered_hero.html" %}
+{% load bulma_tags %}
+
+{% block title %}Edit Classification Task Group{% endblock %}
+
+{% block inner %}
+<h1 class="title is-1">Edit Classification Task Group</h1>
+<form class="box" method="post">
+  {% csrf_token %}
+  {{ form|bulma }}
+  {% if redirect_field_value %}
+  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+  {% endif %}
+  <div class="field has-text-centered">
+    <button class="button is-primary" type="submit">Save</button>
+  </div>
+</form>
+{% endblock inner %}

@@ -1,0 +1,23 @@
+{% extends "centered_hero.html" %}
+
+{% load i18n %}
+{% load bulma_tags %}
+
+{% block head_title %}{% translate "Signup" %}{% endblock %}
+
+{% block inner %}
+        <h1 class="title is-1">{% translate "Sign Up" %}</h1>
+
+        <p class="subtitle is-5">{% blocktranslate %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktranslate %}</p>
+
+        <form class="box" method="post" action="{% url 'account_signup' %}">
+          {% csrf_token %}
+          {{ form|bulma }}
+          {% if redirect_field_value %}
+          <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+          {% endif %}
+          <div class="field has-text-centered">
+            <button class="button is-primary" type="submit">{% translate "Sign Up" %}</button>
+          </div>
+        </form>
+{% endblock %}

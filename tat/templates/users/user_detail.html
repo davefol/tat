@@ -1,0 +1,41 @@
+{% extends "centered_hero.html" %}
+{% load static %}
+
+{% block title %}User: {{ object.username }}{% endblock %}
+
+{% block inner %}
+<h1 class="title is-1">{{ object.username }}</h1>
+<div class="box">
+  {% if object.name %}
+  <p class="subtitle is-3">{{ object.name }}</p>
+  {% endif %}
+  {% if object == request.user %}
+  <!-- Action buttons -->
+  <p class="menu-label">
+  General
+  </p>
+  <ul class="menu-list">
+    <li class="list-item">
+      <a class="" href="{% url 'users:update' %}" role="button">My Info</a>
+    </li>
+    <li class="list-item">
+      <a class="" href="{% url 'account_email' %}" role="button">E-Mail</a>
+    </li>
+    <!-- Your Stuff: Custom user template urls -->
+
+  </ul>
+  <!-- End Action buttons -->
+  {% endif %}
+  {% if request.user.type == "ADMIN" %}
+  <p class="menu-label">
+  Task Info
+  </p>
+  <ul class="menu-list">
+    <li class="list-item">
+      <p class="pt-3 pb-2 pr-2 pl-2">Classification tasks completed: {{ user.classificationtask_set.count }}</p>
+    </li>
+  </ul>
+  {% endif %}
+</div>
+</div>
+{% endblock inner %}

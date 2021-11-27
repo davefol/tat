@@ -1,0 +1,19 @@
+{% extends "centered_hero_wide.html" %}
+{% load bulma_tags %}
+{% load static %}
+
+{% block title %}Classify Table{% endblock %}
+
+{% block inner %}
+<h1 class="title is-1">Classify Table</h1>
+<div class="box">
+  {% autoescape off %}
+  {{ table_html }}
+  {% endautoescape %}
+</div>
+<form class="box" method="post">
+  {% csrf_token %}
+  {{ form| bulma }}
+  <button type="submit" class="button is-primary">Complete</button>
+</form>
+{% endblock inner %}

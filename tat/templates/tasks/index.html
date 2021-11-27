@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Task Types{% endblock %}
+
+{% block content %}
+<section class ="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-5">
+        <nav class="panel">
+        <p class="panel-heading">Task Types</p>
+        {% for task_type in task_types %}
+        <a class="panel-block" href="{{task_type.url}}">{{task_type.name}}</a>
+        {% endfor %}
+        </nav>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content %}

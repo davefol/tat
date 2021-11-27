@@ -1,0 +1,13 @@
+{% extends "centered_hero.html" %}
+{% load static %}
+
+{% block title %}Confirm Delete Classification Task{% endblock %}
+
+{% block inner %}
+<h1 class="title is-1">Delete Classification Task</h1>
+<form class="box" method="post">
+  {% csrf_token %}
+  <p>Are you sure you want to delete {{ object.group.name }}: {{ object.name }}?</p>
+  <button type="submit" class="button is-danger">Delete</button>
+</form>
+{% endblock inner %}

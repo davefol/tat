@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Classification Tasks{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column">
+        <h1 class="title is-1">
+            Classification Tasks
+        </h1>
+        <a class="button mb-4" href="{% url 'tasks:classification_create' %}">
+          Create New Task Group
+        </a>
+        {% if object_list %}
+        {% for taskgroup in object_list %}
+        <div class="card">
+          <div class="card-header">
+            <p class="card-header-title is-centered">{{ taskgroup.name }}</p>
+          </div>
+          <div class="card-content has-background-light">
+            <div class="box">
+              Class Options:
+              {% for class_option in taskgroup.table_class_options %}
+              <span class="tag">
+                {{ class_option }}
+              </span>
+              {% endfor %}
+            </div>
+            <!-- Classification Task list-->
+            {% for task in taskgroup.classificationtask_set.all %}
+            <div class="card {% if not forloop.last %} mb-4 {% endif %}">
+              <div class="card-header {% if task.completed %} has-background-success-light {% endif %}">
+                <p class="card-header-title is-centered">
+                  <a href="{% url 'tasks:classification_task_annotate' task.pk %}">
+                    {{ task.name }}
+                  </a>
+                </p>
+              </div>
+                {% if request.user.type == "ADMIN" and task.completed %}
+                <div class="card-content">
+                  <p>completed by {{ task.completed_by.username }} at {{ task.completed_at }}</p>
+                </div>
+                {% endif %}
+              {% if request.user.type == "ADMIN" %}
+              <footer class="card-footer">
+                <a href="{% url 'tasks:classification_task_delete' task.pk%}" class="card-footer-item">Delete</a>
+              </footer>
+              {% endif %}
+            </div>
+            {% endfor %}
+          </div>
+          {% if request.user.type == "ADMIN" %}
+          <footer class="card-footer">
+            <a href="{% url 'tasks:classification_group_add_tasks' taskgroup.pk %}" class="card-footer-item">Add</a>
+            <a href="{% url 'tasks:classification_group_edit' taskgroup.pk %}" class="card-footer-item">Edit</a>
+            <a href="{% url 'tasks:classification_group_delete' taskgroup.pk %}" class="card-footer-item">Delete</a>
+          </footer>
+          {% endif %}
+        </div>
+        {% endfor %}
+        {% else %}
+        <p class="subtitle is-3">There are no classification tasks</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content %}

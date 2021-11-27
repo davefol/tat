@@ -1,0 +1,30 @@
+
+{% extends "centered_hero.html" %}
+{% load bulma_tags %}
+
+{% block title %}Create Classification Task Group{% endblock %}
+
+{% block inner %}
+<h1 class="title is-1">Create Classification Task Group</h1>
+<form class="box" method="post" enctype='multipart/form-data'>
+  {% csrf_token %}
+  <p class="subtitle is-5 has-text-dark">
+  {{ task_group.name }}
+  </p>
+  <p>
+  Class options:
+  {% for class_option in task_group.table_class_options %}
+  <span class="tag">
+    {{ class_option }}
+  </span>
+  {% endfor %}
+  </p>
+  {{ form|bulma }}
+  {% if redirect_field_value %}
+  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+  {% endif %}
+  <div class="field has-text-centered">
+    <button class="button is-primary" type="submit">Save</button>
+  </div>
+</form>
+{% endblock inner %}

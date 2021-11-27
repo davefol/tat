@@ -1,0 +1,17 @@
+{% extends "centered_hero.html" %}
+{% load bulma_tags %}
+
+{% block title %}{{ user.username }}{% endblock %}
+
+{% block inner %}
+  <h1 class="title is-1">{{ user.username }}</h1>
+  <form class="box" method="post" action="{% url 'users:update' %}">
+    {% csrf_token %}
+    {{ form|bulma }}
+    <div class="control-group">
+      <div class="controls">
+        <button type="submit" class="button is-primary">Update</button>
+      </div>
+    </div>
+  </form>
+{% endblock %}

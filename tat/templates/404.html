@@ -1,0 +1,9 @@
+{% extends "centered_hero.html" %}
+
+{% block title %}Page not found{% endblock %}
+
+{% block inner %}
+<h1 class="title is-1">Page not found</h1>
+
+<p class="subtitle is-3">{% if exception %}{{ exception }}{% else %}This is not the page you were looking for.{% endif %}</p>
+{% endblock inner %}
