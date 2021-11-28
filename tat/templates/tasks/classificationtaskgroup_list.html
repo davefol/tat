@@ -30,7 +30,7 @@
               {% endfor %}
             </div>
             <!-- Classification Task list-->
-            {% for task in taskgroup.classificationtask_set.all %}
+            {% for task in taskgroup.tasks.all %}
             <div class="card {% if not forloop.last %} mb-4 {% endif %}">
               <div class="card-header {% if task.completed %} has-background-success-light {% endif %}">
                 <p class="card-header-title is-centered">

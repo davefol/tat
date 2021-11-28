@@ -1,6 +1,21 @@
-from django.urls import path, re_path
+from django.urls import include, path, re_path
+from rest_framework import routers
+from rest_framework.authtoken.views import obtain_auth_token
 
 from . import views
+from .api import views as api_views
+
+api_router = routers.DefaultRouter()
+api_router.register(
+    r"classification_tasks",
+    api_views.ClassificationTaskViewSet,
+    basename="classification_task",
+)
+api_router.register(
+    r"classification_task_groups",
+    api_views.ClassificationTaskGroupViewSet,
+    basename="classification_task_group",
+)
 
 app_name = "tasks"
 urlpatterns = [
@@ -40,4 +55,7 @@ urlpatterns = [
         views.ClassificationTaskAnnotateFormView.as_view(),
         name="classification_task_annotate",
     ),
+    path("api/", include(api_router.urls)),
+    path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
+    path("auth-token/", obtain_auth_token),
 ]

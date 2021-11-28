@@ -124,6 +124,9 @@ Add certs to .gitignore::
 
     certs/*
 
+To use httpie add this alias to your startup script (zshrc, bashrc, etc.)::
+
+        alias http="http --verify=\"$(mkcert --CAROOT)/rootCA.pem\""
 
 Docstrings to Documentation
 ----------------------------------------------------------------------

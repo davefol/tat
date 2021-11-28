@@ -1,3 +1,5 @@
+import uuid as uuid_lib
+
 from django.conf import settings
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
@@ -6,6 +8,7 @@ from django.db import models
 class ClassificationTaskGroup(models.Model):
     name = models.CharField(max_length=256)
     table_class_options = ArrayField(models.CharField(max_length=256))
+    uuid = models.UUIDField(db_index=True, default=uuid_lib.uuid4, editable=False)
 
 
 class ClassificationTask(models.Model):
@@ -19,4 +22,7 @@ class ClassificationTask(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     completed_at = models.DateTimeField(null=True)  # Create your models here.
-    group = models.ForeignKey(ClassificationTaskGroup, on_delete=models.CASCADE)
+    group = models.ForeignKey(
+        ClassificationTaskGroup, on_delete=models.CASCADE, related_name="tasks"
+    )
+    uuid = models.UUIDField(db_index=True, default=uuid_lib.uuid4, editable=False)
