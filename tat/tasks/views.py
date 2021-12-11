@@ -130,7 +130,10 @@ def el_non_ix_child(el):
 
 
 def el_text(el):
-    return any("".join(el.itertext()).strip())
+    try:
+        return any("".join(el.itertext()).strip())
+    except ValueError:
+        return False
 
 
 class ClassificationTaskAnnotateFormView(
