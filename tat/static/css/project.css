@@ -11,3 +11,30 @@
   background-color: #f2dede;
   border-color: #eed3d7;
 }
+
+body {
+  font-family: 'Barlow', sans-serif;
+  font-weight: 400;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Merriweather Sans', sans-serif;
+}
+
+.title {
+  font-family: 'Merriweather Sans', sans-serif;
+}
+
+.is-squished {
+  overflow: hidden;
+  height: 0;
+  padding: 0;
+  opacity: 0;
+}
+.squishable-card > .card-header:hover {
+  cursor: pointer;
+}
+
+.faded {
+  opacity: 50%;
+}
