@@ -149,6 +149,7 @@ class ClassificationTaskAnnotateFormView(
             ClassificationTask, pk=self.kwargs["pk"]
         )
         kwargs["table_class_options"] = classification_task.group.table_class_options
+        kwargs["initial"] = {"table_class": classification_task.table_class}
         return kwargs
 
     def get_context_data(self, *args, **kwargs):
@@ -202,6 +203,7 @@ class ClassificationTaskAnnotateFormView(
         context["name"] = self.object.name
         context["html_source"] = self.object.html_table.source_document.source_url
         context["xpath"] = self.object.html_table.xpath
+        context["table_class"] = self.object.table_class
         return context
 
     def form_valid(self, form):

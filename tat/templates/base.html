@@ -72,7 +72,7 @@
 
     {% if messages %}
     {% for message in messages %}
-    <div class="alert message {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+    <div class="mb-0 alert message {% if message.tags %}alert-{{ message.tags }}{% endif %}">
       <div class="message-header">
         {{ message }}
         <button type="button" class="delete" data-dismiss="alert" aria-label="Close" onclick="$(this).parent().parent().alert('close')"></button>

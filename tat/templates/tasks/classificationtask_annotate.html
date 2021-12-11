@@ -7,7 +7,7 @@
 {% block inner %}
 <h1 class="title is-1">Classify Table</h1>
 <div class="box">
-  <h2 class="mb-3">{{ name }}</h2>
+  <h2 class="mb-3">{{ name }} <span class="pl-3 has-text-grey-light">{{ table_class }}</span></h2>
   <div class="columns is-centered">
     <div class="column is-half">
       <form class="field-body" action="{{self_url}}" method="GET">
