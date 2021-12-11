@@ -1,19 +1,4 @@
 from django import forms
-from django.contrib.postgres.forms import SimpleArrayField
-
-
-class ClassificationTaskGroupCreateForm(forms.Form):
-    name = forms.CharField(max_length=256)
-    table_class_options = SimpleArrayField(forms.CharField(max_length=256))
-    html_tables = forms.FileField(
-        widget=forms.ClearableFileInput(attrs={"multiple": True})
-    )
-
-
-class ClassificationTaskGroupAddTaskForm(forms.Form):
-    html_tables = forms.FileField(
-        widget=forms.ClearableFileInput(attrs={"multiple": True})
-    )
 
 
 class ClassificationTaskAnnotateForm(forms.Form):
@@ -24,3 +9,8 @@ class ClassificationTaskAnnotateForm(forms.Form):
             choices=[(s, s) for s in table_class_options],
             widget=forms.RadioSelect,
         )
+
+
+class ClassificationTaskContextForm(forms.Form):
+    before = forms.IntegerField(min_value=0, max_value=100)
+    after = forms.IntegerField(min_value=0, max_value=100)

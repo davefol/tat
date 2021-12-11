@@ -7,13 +7,56 @@
 {% block inner %}
 <h1 class="title is-1">Classify Table</h1>
 <div class="box">
-  {% autoescape off %}
-  {{ table_html }}
-  {% endautoescape %}
+  <h2 class="mb-3">{{ name }}</h2>
+  <div class="columns is-centered">
+    <div class="column is-half">
+      <form class="field-body" action="{{self_url}}" method="GET">
+        {{ context_form | bulma }}
+        <div class="field">
+          <label class="label">&nbsp</label>
+          <button type="submit" class="button">Set Context</button>
+        </div>
+      </form>
+    </div>
+  </div>
+      {% autoescape off %}
+      {{ html_fragment }}
+      {% endautoescape %}
 </div>
-<form class="box" method="post">
+<form id="annotation-form" class="box" method="post">
   {% csrf_token %}
+  <p class="mb-3">Use the number keys to quickly select an option and press the 'd' key to submit the form.</p>
   {{ form| bulma }}
   <button type="submit" class="button is-primary">Complete</button>
 </form>
+
+<p>
+Source: <a href="{{ html_source }}">{{ html_source }}</a>
+</p>
+<p>
+xpath: {{xpath}}
+</p>
+
+<script>
+  document.addEventListener('keydown', function(e) {
+      let index = Number.parseInt(e.key);
+      if (isNaN(index)) {
+          if (e.key == 'd') {
+              // submit form
+              document.getElementById('annotation-form').submit();
+            } else {
+                return;
+              }
+        } else {
+            // Select radio button by number
+            let radioButton = document.getElementById(`id_table_class_${index-1}`);
+            if (radioButton === null) {
+                return;
+              }
+            radioButton.checked = true;
+            radioButton.scrollIntoView()
+            return;
+          }
+    })
+</script>
 {% endblock inner %}

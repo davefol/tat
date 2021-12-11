@@ -11,16 +11,13 @@
         <h1 class="title is-1">
             Classification Tasks
         </h1>
-        <a class="button mb-4" href="{% url 'tasks:classification_create' %}">
-          Create New Task Group
-        </a>
         {% if object_list %}
         {% for taskgroup in object_list %}
-        <div class="card">
+        <div class="card squishable-card {% if not forloop.last %} mb-4 {% endif %}">
           <div class="card-header">
-            <p class="card-header-title is-centered">{{ taskgroup.name }}</p>
+            <p class="card-header-title is-centered">{{ taskgroup.name }} <span class="has-text-grey-light pl-2">[{{taskgroup.tasks.count}}]</span></p>
           </div>
-          <div class="card-content has-background-light">
+          <div class="card-content has-background-light is-squished">
             <div class="box">
               Class Options:
               {% for class_option in taskgroup.table_class_options %}
@@ -54,7 +51,6 @@
           </div>
           {% if request.user.type == "ADMIN" %}
           <footer class="card-footer">
-            <a href="{% url 'tasks:classification_group_add_tasks' taskgroup.pk %}" class="card-footer-item">Add</a>
             <a href="{% url 'tasks:classification_group_edit' taskgroup.pk %}" class="card-footer-item">Edit</a>
             <a href="{% url 'tasks:classification_group_delete' taskgroup.pk %}" class="card-footer-item">Delete</a>
           </footer>
@@ -68,4 +64,18 @@
     </div>
   </div>
 </section>
+
+    <script>
+      squishables = document.getElementsByClassName("squishable-card")
+      Array.prototype.forEach.call(squishables, function(el, i){
+        el.querySelector(".card-header").addEventListener('click', function () {
+          console.log(this);
+          if (this.parentElement.querySelector(".card-content").classList.contains("is-squished")) {
+            this.parentElement.querySelector(".card-content").classList.remove("is-squished");
+          } else {
+            this.parentElement.querySelector(".card-content").classList.add("is-squished");
+          }
+        }, false);
+      });
+    </script>
 {% endblock content %}

@@ -16,6 +16,10 @@ api_router.register(
     api_views.ClassificationTaskGroupViewSet,
     basename="classification_task_group",
 )
+api_router.register(
+    r"html_documents", api_views.HTMLDocumentViewSet, basename="html_document"
+)
+api_router.register(r"html_tables", api_views.HTMLTableViewSet, basename="html_table")
 
 app_name = "tasks"
 urlpatterns = [
@@ -24,11 +28,6 @@ urlpatterns = [
         "classification/",
         views.ClassificationTaskGroupListView.as_view(),
         name="classification_tasks",
-    ),
-    path(
-        "classification/create/",
-        views.ClassificationTaskGroupCreateView.as_view(),
-        name="classification_create",
     ),
     re_path(
         r"classification/edit_task_group/(?P<pk>\d+)/$",
@@ -46,16 +45,31 @@ urlpatterns = [
         name="classification_task_delete",
     ),
     re_path(
-        r"classification/add_tasks/(?P<pk>\d+)/$",
-        views.ClassificationTaskGroupAddTasksView.as_view(),
-        name="classification_group_add_tasks",
-    ),
-    re_path(
         r"classification/annotate/(?P<pk>\d+)/$",
         views.ClassificationTaskAnnotateFormView.as_view(),
         name="classification_task_annotate",
     ),
+    path(
+        r"html_table_context/<int:pk>/",
+        views.HTMLTableContextView.as_view(),
+        name="html_table_context",
+    ),
     path("api/", include(api_router.urls)),
+    path(
+        "api/html_document_retrieve_source_url/<path:source_url>",
+        api_views.HTMLDocumentRetrieveSourceUrl.as_view(),
+        name="html_document_retrieve_source_url",
+    ),
+    path(
+        "api/classification_task_group_retrieve_name/<str:name>",
+        api_views.ClassificatonTaskGroupRetrieveName.as_view(),
+        name="classification_task_group_retrieve_name",
+    ),
+    path(
+        "api/html_table_retrieve_source_url_xpath/",
+        api_views.html_table_retrieve_source_url_xpath,
+        name="html_table_retrieve_source_url_xpath",
+    ),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
     path("auth-token/", obtain_auth_token),
 ]
