@@ -155,11 +155,19 @@ def el_unset_height_inline_style(el):
 
 
 class ClassificationTaskAnnotateFormView(
-    LoginRequiredMixin, SuccessMessageMixin, FormView
+    LoginRequiredMixin, SuccessMessageMixin, UserPassesTestMixin, FormView
 ):
     form_class = ClassificationTaskAnnotateForm
     template_name = "tasks/classificationtask_annotate.html"
     success_message = "Task Complete: Table successfully classified"
+
+    def test_func(self):
+        self.object = get_object_or_404(ClassificationTask, pk=self.kwargs["pk"])
+        return (
+            self.request.user.type == "ADMIN"
+            or self.request.user == self.object.completed_by  # type: ignore
+            or not self.object.completed_by
+        )
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
