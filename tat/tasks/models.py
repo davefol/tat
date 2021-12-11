@@ -51,7 +51,10 @@ class ClassificationTask(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     completed_at = models.DateTimeField(null=True)  # Create your models here.
     completed_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        null=True,
+        related_name="classification_tasks",
     )
     html_table = models.ForeignKey(
         HTMLTable,
