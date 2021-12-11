@@ -39,6 +39,9 @@ xpath: {{xpath}}
 
 <script>
   document.addEventListener('keydown', function(e) {
+      if (document.activeElement == document.getElementById("id_before") || document.activeElement == document.getElementById("id_after")) {
+        return;
+      }
       let index = Number.parseInt(e.key);
       if (isNaN(index)) {
           if (e.key == 'd') {
