@@ -164,3 +164,14 @@ Load the bulma_tags library and use the bulma filters::
      </div>
      <input type="hidden" name="next" value="{{ next }}"/>
   </form>
+
+Access the Postgres database with psql
+----------------------------------------------------------------------
+container id can be found with docker ps and postgres username is stored
+in::
+
+  .env/.production/.postgres
+
+Then run:::
+
+  docker exec --env-file .envs/.production/.postgres -it <container id> psql -d tat -U <postgres username>
