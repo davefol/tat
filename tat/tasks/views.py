@@ -1,4 +1,5 @@
 import itertools
+import re
 from dataclasses import dataclass
 from datetime import datetime
 
@@ -136,6 +137,13 @@ def el_text(el):
         return False
 
 
+def el_unset_height_inline_style(el):
+    style = el.attrib["style"]
+    style = re.sub(r"(height:[^;]*;)", lambda x: "/*" + x.group(1) + "*/", style)
+    el.attrib["style"] = style
+    return el
+
+
 class ClassificationTaskAnnotateFormView(
     LoginRequiredMixin, SuccessMessageMixin, FormView
 ):
@@ -185,11 +193,14 @@ class ClassificationTaskAnnotateFormView(
         ):
             try:
                 el.set("class", "faded")
+                if el.tag == "table":
+                    el = el_unset_height_inline_style(el)
             except TypeError:
                 pass
             html_fragment = lxml.html.tostring(el, pretty_print=True) + html_fragment
 
         table_el.set("class", "box")
+        table_el = el_unset_height_inline_style(table_el)
         html_fragment += lxml.html.tostring(table_el, pretty_print=True)
 
         for el in itertools.islice(
@@ -197,6 +208,8 @@ class ClassificationTaskAnnotateFormView(
         ):
             try:
                 el.set("class", "faded")
+                if el.tag == "table":
+                    el = el_unset_height_inline_style(el)
             except TypeError:
                 pass
             html_fragment += lxml.html.tostring(el, pretty_print=True)
