@@ -155,10 +155,18 @@ class ClassificationTaskAnnotateFormView(
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
 
-        num_el_before = self.request.GET.get("before") or 10
-        num_el_after = self.request.GET.get("after") or 0
+        num_el_before = (
+            self.request.GET.get("before")
+            or self.request.user.html_table_context_before
+        )
+        num_el_after = (
+            self.request.GET.get("after") or self.request.user.html_table_context_after
+        )
         num_el_before = int(num_el_before)
         num_el_after = int(num_el_after)
+        self.request.user.html_table_context_before = num_el_before
+        self.request.user.html_table_context_after = num_el_after
+        self.request.user.save()
 
         self.object = get_object_or_404(ClassificationTask, pk=self.kwargs["pk"])
 
