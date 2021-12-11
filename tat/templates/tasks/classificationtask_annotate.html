@@ -38,6 +38,7 @@ xpath: {{xpath}}
 </p>
 
 <script>
+  document.getElementById("classification_target").scrollIntoView();
   document.addEventListener('keydown', function(e) {
       if (document.activeElement == document.getElementById("id_before") || document.activeElement == document.getElementById("id_after")) {
         return;

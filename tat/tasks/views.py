@@ -138,9 +138,12 @@ def el_text(el):
 
 
 def el_unset_height_inline_style(el):
-    style = el.attrib["style"]
-    style = re.sub(r"(height:[^;]*;)", lambda x: "/*" + x.group(1) + "*/", style)
-    el.attrib["style"] = style
+    try:
+        style = el.attrib["style"]
+        style = re.sub(r"(height:[^;]*;)", lambda x: "/*" + x.group(1) + "*/", style)
+        el.attrib["style"] = style
+    except KeyError:
+        pass
     return el
 
 
@@ -184,6 +187,7 @@ class ClassificationTaskAnnotateFormView(
         table_el = root.xpath(self.object.html_table.xpath)[0]
         # table_el = nearest_el_with_siblings(table_el)
         table_el = nearest_el_with_siblings(table_el)
+        table_el.attrib["id"] = "classification_target"
 
         # build up an html fragment from the table
         # and the surrounding elements
