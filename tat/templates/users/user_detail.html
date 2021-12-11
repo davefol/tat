@@ -35,6 +35,14 @@
       <p class="pt-3 pb-2 pr-2 pl-2">Classification tasks completed: {{ user.classification_tasks.count }}</p>
     </li>
   </ul>
+  <p class="menu-label">
+  Admin
+  </p>
+  <ul class="menu-list">
+    <li class="list-item">
+      <a href="{% url 'tasks:download_all_data' %}" download role="button">Download All Data</a>
+    </li>
+  </ul>
   {% endif %}
 </div>
 </div>

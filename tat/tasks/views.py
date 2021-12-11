@@ -1,14 +1,21 @@
+import io
 import itertools
 import re
+import time
+import zipfile
 from dataclasses import dataclass
 from datetime import datetime
 
 import lxml.html
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.core import serializers
+from django.core.exceptions import PermissionDenied
 from django.db.models import Prefetch, Q
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
+from django.utils.text import slugify
 from django.views.generic import (
     DeleteView,
     DetailView,
@@ -19,7 +26,7 @@ from django.views.generic import (
 )
 
 from .forms import ClassificationTaskAnnotateForm, ClassificationTaskContextForm
-from .models import ClassificationTask, ClassificationTaskGroup, HTMLTable
+from .models import ClassificationTask, ClassificationTaskGroup, HTMLDocument, HTMLTable
 
 
 @dataclass
@@ -250,3 +257,58 @@ class ClassificationTaskAnnotateFormView(
             return reverse(
                 "tasks:classification_task_annotate", kwargs={"pk": next_task.id}
             )
+
+
+def download_all_data(request):
+    if request.user.is_authenticated and request.user.type == "ADMIN":
+        models = [
+            ("html_documents", HTMLDocument),
+            ("html_tables", HTMLTable),
+            ("classification_task_groups", ClassificationTaskGroup),
+            ("classification_tasks", ClassificationTask),
+        ]
+        buffer = io.BytesIO()
+        zip_file = zipfile.ZipFile(buffer, "w")
+        for collection_name, model_class in models:
+            data = serializers.serialize("json", model_class.objects.all())
+            zip_file.writestr(f"{collection_name}.json", data)
+        zip_file.close()
+        response = HttpResponse(buffer.getvalue())
+        response["Content-Type"] = "application/x-zip-compressed"
+        response[
+            "Content-Disposition"
+        ] = f"inline; filename=data_{int(time.time())}.zip"
+        return response
+    else:
+        raise PermissionDenied
+
+
+def classification_group_download(request, pk):
+    if request.user.is_authenticated and request.user.type == "ADMIN":
+        classification_task_group = get_object_or_404(ClassificationTaskGroup, pk=pk)
+        classification_tasks = classification_task_group.tasks
+        html_tables = set()
+        for classification_task in classification_tasks.all():
+            html_tables.add(classification_task.html_table)
+        html_documents = set()
+        for html_table in html_tables:
+            html_documents.add(html_table.source_document)
+        buffer = io.BytesIO()
+        zip_file = zipfile.ZipFile(buffer, "w")
+        data = serializers.serialize("jsonl", [classification_task_group])
+        zip_file.writestr("classification_task_group.json", data)
+        data = serializers.serialize("jsonl", classification_tasks.all())
+        zip_file.writestr("classification_tasks.json", data)
+        data = serializers.serialize("jsonl", html_tables)
+        zip_file.writestr("html_tables.json", data)
+        data = serializers.serialize("jsonl", html_documents)
+        zip_file.writestr("html_documents.json", data)
+        zip_file.close()
+        response = HttpResponse(buffer.getvalue())
+        response["Content-Type"] = "application/x-zip-compressed"
+        response[
+            "Content-Disposition"
+        ] = f"inline; filename={slugify(classification_task_group.name)}_{int(time.time())}.zip"
+        return response
+    else:
+        raise PermissionDenied

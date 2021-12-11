@@ -39,6 +39,9 @@ class ClassificationTaskGroup(models.Model):
         db_index=True, default=uuid_lib.uuid4, editable=False, unique=True
     )
 
+    def completed_task_count(self):
+        return self.tasks.filter(completed=True).count()
+
 
 class ClassificationTask(models.Model):
     name = models.CharField(max_length=256)

@@ -15,7 +15,7 @@
         {% for taskgroup in object_list %}
         <div class="card squishable-card {% if not forloop.last %} mb-4 {% endif %}">
           <div class="card-header">
-            <p class="card-header-title is-centered">{{ taskgroup.name }} <span class="has-text-grey-light pl-2">[{{taskgroup.tasks.count}}]</span></p>
+            <p class="card-header-title is-centered">{{ taskgroup.name }} <span class="has-text-grey-light pl-2">[{{taskgroup.completed_task_count}}/{{taskgroup.tasks.count}}]</span></p>
           </div>
           <div class="card-content has-background-light is-squished">
             <div class="box">
@@ -52,6 +52,7 @@
           {% if request.user.type == "ADMIN" %}
           <footer class="card-footer">
             <a href="{% url 'tasks:classification_group_edit' taskgroup.pk %}" class="card-footer-item">Edit</a>
+            <a href="{% url 'tasks:classification_group_download' taskgroup.pk %}" class="card-footer-item" download>Download</a>
             <a href="{% url 'tasks:classification_group_delete' taskgroup.pk %}" class="card-footer-item">Delete</a>
           </footer>
           {% endif %}

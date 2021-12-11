@@ -70,6 +70,16 @@ urlpatterns = [
         api_views.html_table_retrieve_source_url_xpath,
         name="html_table_retrieve_source_url_xpath",
     ),
+    path(
+        "download_all_data",
+        views.download_all_data,
+        name="download_all_data",
+    ),
+    path(
+        "classification_group_download/<int:pk>",
+        views.classification_group_download,
+        name="classification_group_download",
+    ),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
     path("auth-token/", obtain_auth_token),
 ]
